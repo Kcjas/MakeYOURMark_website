@@ -23,7 +23,6 @@ export function Footer() {
           </a>
         )}
       </div>
-      <p className="mt-12 text-sm">site by Thejas</p>
     </footer>
   );
 }

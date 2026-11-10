@@ -24,7 +24,6 @@ export function Venue() {
               <span className="whitespace-nowrap">{when.time}</span> ·{" "}
               <span className="whitespace-nowrap">just walk in</span>
             </p>
-            <p className="font-display text-2xl">You know the one.</p>
           </div>
         </div>
       </div>

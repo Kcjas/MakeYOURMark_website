@@ -24,8 +24,6 @@ export function HeroTop() {
     <header className="relative flex items-start justify-between gap-4 px-4 pt-5 sm:px-8 lg:px-14 lg:pt-8">
       <p className="slap pt-2 font-display text-xl leading-none" style={vars({ "--d": "1850ms" })}>
         EnROOT Group 6
-        <br />
-        <span className="text-base">part of ROOT, SUTD</span>
       </p>
       {/* on phones the sticker is stuck over the title's corner so the header stays one line tall */}
       <div

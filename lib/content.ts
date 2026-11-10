@@ -19,13 +19,13 @@ export const stations = [
     id: "flowers",
     name: "Pipe cleaner flowers",
     line: "Twist, loop, bend. A bouquet that never dies.",
-    time: "~15 min",
+    time: "~5 min",
   },
   {
     id: "squishies",
     name: "Squishies",
     line: "Draw a little guy, stuff him with cotton, squish forever.",
-    time: "~30 min",
+    time: "~10 min",
   },
   {
     id: "board",

@@ -33,7 +33,7 @@ export function Strip({
   );
 }
 
-/** "takes ~15 min" with a hand-drawn loop around the time. */
+/** "takes ~5 min" with a hand-drawn loop around the time. */
 export function TimeTag({ time, seed, className }: { time: string; seed: number; className?: string }) {
   return (
     <p className={clsx("mt-5 flex flex-wrap items-center gap-x-2 text-base font-bold", className)}>

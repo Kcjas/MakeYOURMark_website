@@ -39,7 +39,7 @@ A chill, no-skill-needed student craft night run by students, not a workshop or 
 
 ## Brand Commitments
 
-- Organised by EnROOT Group 6 as part of ROOT (SUTD student government). Footer credits ROOT and "site by Thejas".
+- Organised by EnROOT Group 6 as part of ROOT (SUTD student government). Footer credits ROOT.
 - Voice: a student talking to other students. Short, specific, a bit playful. No marketing buzzwords (unleash, elevate, seamless, immersive, journey), no rhetorical-question headlines, no "Whether you're X or Y".
 - Visual brief (user-pinned): handmade crafting table mid-session; saturated pipe-cleaner colours on off-white paper with near-black ink; no gradients, no purple/indigo/violet, no cream+serif+sage; hand-drawn SVG doodles only, no emoji icons, stock icon sets or AI images; minimal motion (hover wiggle, countdown stamp).
 
