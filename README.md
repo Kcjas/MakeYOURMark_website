@@ -1,36 +1,32 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MakeYourMark
 
-## Getting Started
+One-page site for MakeYourMark, a free walk-in craft night at SUTD Campus Centre (Mon 16 Nov 2026, 5:30–8:30pm SGT). By EnROOT Group 6, part of ROOT.
 
-First, run the development server:
+## Run it
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev     # http://localhost:3000
+npm run build   # production build (fully static)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Deploy: import the repo on Vercel, no settings needed.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Where to change things
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| What | File |
+| --- | --- |
+| All copy, stations, FAQ, **Instagram link (TODO)** | `lib/content.ts` |
+| Event start/end (SGT) for the countdown | `lib/event.ts` |
+| Colours, fonts, tilts, shadows, motion curve | `app/globals.css` (`@theme`) |
+| Sections | `components/sections/*.tsx` |
+| Hand-drawn doodles | `components/doodles.tsx` |
 
-## Learn More
+The countdown switches on its own: "Starts in" before 5:30pm, "Happening now" until 8:30pm, then a thank-you note.
 
-To learn more about Next.js, take a look at the following resources:
+## Libraries
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [Motion](https://motion.dev): countdown stamp animation
+- [Radix Accordion](https://www.radix-ui.com/primitives/docs/components/accordion): FAQ
+- [Rough.js](https://roughjs.com): sketchy lines, computed on the server with fixed seeds
+- `next/font`: Londrina Solid + Atkinson Hyperlegible Next, self-hosted (no requests to Google)

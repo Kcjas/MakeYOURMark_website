@@ -1,26 +1,230 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ---------- Design tokens ---------- */
+@theme {
+  --color-paper: #f3f1ec;
+  --color-card: #fbfaf6;
+  --color-ink: #1b1a17;
+  --color-tomato: #ef4e34;
+  --color-sunflower: #ffc21f;
+  --color-cobalt: #1e4fd8;
+  --color-grass: #2f9e47;
+  --color-cork: #c9945c;
+  --color-cork-shade: #8e6235;
+  --color-tape: #e6d9b0;
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+
+  /* the only tilts used on the page */
+  --tilt-a: -2deg;
+  --tilt-b: 1.5deg;
+  --tilt-c: -1deg;
+  --tilt-d: 2.5deg;
+
+  --animate-accordion-down: accordion-down 220ms var(--ease-out);
+  --animate-accordion-up: accordion-up 160ms var(--ease-out);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-londrina), "Arial Rounded MT Bold", sans-serif;
+  --font-body: var(--font-atkinson), sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ---------- Base ---------- */
+:root {
+  color-scheme: light;
+  scrollbar-color: var(--color-ink) var(--color-paper);
+  /* flat paper-cutout shadows: one set of offsets for the whole page */
+  --cut-sm: 3px 4px 0;
+  --cut-md: 5px 6px 0;
+}
+
+html {
+  overflow-x: clip;
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-paper);
+  background-image: url("/paper/grain.svg");
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: 1.125rem;
+  line-height: 1.55;
+  overflow-x: clip;
+  -webkit-tap-highlight-color: transparent;
+  text-rendering: optimizeLegibility;
+  /* landscape phones: keep content out of the notch */
+  padding-inline: env(safe-area-inset-left, 0px) env(safe-area-inset-right, 0px);
+}
+
+/* controls feel native: no tap delay, no long-press text selection */
+button,
+a {
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+::selection {
+  background: var(--color-sunflower);
+  color: var(--color-ink);
+}
+
+:focus-visible {
+  outline: 3px dashed var(--color-cobalt);
+  outline-offset: 4px;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* ---------- Paper edges (masks, never gradients) ---------- */
+@utility torn {
+  --t: 10px;
+  mask:
+    url("/paper/tear-top.svg") top left / 200px var(--t) repeat-x,
+    url("/paper/tear-bottom.svg") bottom left / 200px var(--t) repeat-x,
+    url("/paper/solid.svg") center / 100% calc(100% - 2 * var(--t) + 2px) no-repeat;
+}
+
+@utility torn-all {
+  --t: 10px;
+  mask:
+    url("/paper/tear-top.svg") top left / 200px var(--t) repeat-x,
+    url("/paper/tear-bottom.svg") bottom left / 200px var(--t) repeat-x,
+    url("/paper/tear-left.svg") top left / var(--t) 200px repeat-y,
+    url("/paper/tear-right.svg") top right / var(--t) 200px repeat-y,
+    url("/paper/solid.svg") center / calc(100% - 2 * var(--t) + 2px) calc(100% - 2 * var(--t) + 2px) no-repeat;
+}
+
+@utility torn-top {
+  --t: 12px;
+  mask:
+    url("/paper/tear-top.svg") top left / 200px var(--t) repeat-x,
+    url("/paper/solid.svg") bottom / 100% calc(100% - var(--t) + 1px) no-repeat;
+}
+
+@utility pinked {
+  mask:
+    url("/paper/pink-x.svg") top left / 8px 5px repeat-x,
+    url("/paper/pink-x-b.svg") bottom left / 8px 5px repeat-x,
+    url("/paper/pink-y.svg") top left / 5px 8px repeat-y,
+    url("/paper/pink-y-r.svg") top right / 5px 8px repeat-y,
+    url("/paper/solid.svg") center / calc(100% - 9px) calc(100% - 9px) no-repeat;
+}
+
+/* flat cutout shadow that follows the cut edge */
+@utility cut-sm {
+  filter: drop-shadow(var(--cut-sm) var(--shade, var(--color-ink)));
+}
+@utility cut-md {
+  filter: drop-shadow(var(--cut-md) var(--shade, var(--color-ink)));
+}
+
+@utility ruled {
+  background-image: url("/paper/ruled.svg");
+  background-size: 8px 2rem;
+}
+
+@utility cork-texture {
+  background-image: url("/paper/cork.svg"), url("/paper/grain.svg");
+}
+
+/* ---------- Tilt + motion ---------- */
+@utility tilt {
+  rotate: var(--r, 0deg);
+}
+
+@keyframes wiggle {
+  30% {
+    rotate: calc(var(--r, 0deg) - 1.5deg);
+  }
+  65% {
+    rotate: calc(var(--r, 0deg) + 1.2deg);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .wiggle:hover {
+    animation: wiggle 260ms var(--ease-out);
+  }
+}
+
+/* hero strips land like paper being pasted down; starts visible, never faded */
+@keyframes slap {
+  from {
+    scale: 1.14;
+    rotate: calc(var(--r, 0deg) + 5deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .slap {
+    animation: slap 320ms var(--ease-out) var(--d, 0ms) backwards;
+  }
+}
+
+@utility press {
+  transition: scale 120ms var(--ease-out);
+  &:active {
+    scale: 0.97;
+  }
+}
+
+/* wide targets: 0.97 on a full-width card moves it ~10px, too much */
+@utility press-wide {
+  transition: scale 120ms var(--ease-out);
+  &:active {
+    scale: 0.985;
+  }
+}
+
+@keyframes accordion-down {
+  from {
+    height: 0;
+    opacity: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+    opacity: 1;
+  }
+}
+
+@keyframes accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+    opacity: 1;
+  }
+  to {
+    height: 0;
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .motion-safe-accordion {
+    animation: none !important;
+  }
+}
+
+/* rubber-stamp ink: slightly broken edges */
+.stamp-ink {
+  filter: url(#stamp-ink);
 }
