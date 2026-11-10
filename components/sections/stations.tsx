@@ -55,7 +55,7 @@ export function Stations() {
         </li>
 
         {/* 3. big shared board, binder-clipped */}
-        <li className="relative mt-10 lg:col-span-9 lg:col-start-3 lg:-mt-4">
+        <li className="relative mt-10 lg:col-span-9 lg:col-start-3 lg:mt-10">
           <BinderClip className="absolute -top-8 left-10 z-10 h-14 w-auto" />
           <article className="wiggle tilt relative origin-top-left" style={vars({ "--r": "var(--tilt-c)" })}>
             <div className="cut-md">
