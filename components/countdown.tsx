@@ -1,13 +1,17 @@
 "use client";
 
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { LazyMotion, domAnimation, m, useReducedMotion } from "motion/react";
 import type { PathInfo } from "roughjs/bin/core";
 import { getPhase, splitDuration } from "@/lib/event";
 
-/* ---------- a 1s clock shared by everyone, paused while the tab is hidden ---------- */
+/* ---------- a 1s clock shared by everyone ----------
+   Paused while the tab is hidden or the timer is scrolled off screen,
+   so a phone isn't re-rendering every second for nothing. */
 const listeners = new Set<() => void>();
 let timer: ReturnType<typeof setTimeout> | undefined;
+let hidden = false;
+let offscreen = false;
 
 function tick() {
   listeners.forEach((l) => l());
@@ -18,15 +22,25 @@ function stop() {
   clearTimeout(timer);
   timer = undefined;
 }
+function sync() {
+  const run = listeners.size > 0 && !hidden && !offscreen;
+  if (run && !timer) tick();
+  if (!run) stop();
+}
 function onVisibility() {
-  if (document.hidden) stop();
-  else if (!timer) tick();
+  hidden = document.hidden;
+  sync();
+}
+function setOffscreen(value: boolean) {
+  offscreen = value;
+  sync();
 }
 function subscribe(cb: () => void) {
   listeners.add(cb);
   if (listeners.size === 1) {
-    tick();
+    hidden = document.hidden;
     document.addEventListener("visibilitychange", onVisibility);
+    sync();
   }
   return () => {
     listeners.delete(cb);
@@ -42,6 +56,10 @@ const getServerSnapshot = () => null;
 /* ---------- pieces ---------- */
 const TILTS = ["-2deg", "1.5deg", "-1deg", "2.5deg"];
 const EASE = [0.23, 1, 0.32, 1] as const;
+/** first stamps wait for the hero strips to land */
+const FIRST_DELAY = 0.35;
+const STAMP = { opacity: 0, scale: 1.5, rotate: -8 };
+const LANDED = { opacity: 1, scale: 1, rotate: 0 };
 
 type Unit = { value: number | null; label: string };
 
@@ -63,24 +81,38 @@ function Frame({ paths }: { paths: PathInfo[] }) {
   );
 }
 
-function Digit({ char, index, settled, reduce }: { char: string; index: number; settled: boolean; reduce: boolean }) {
+function Digit({
+  char,
+  index,
+  settled,
+  reduce,
+  subtle,
+}: {
+  char: string;
+  index: number;
+  settled: boolean;
+  reduce: boolean;
+  /** seconds change every second: re-stamp gently */
+  subtle: boolean;
+}) {
+  const initial = reduce
+    ? false
+    : !settled
+      ? STAMP
+      : subtle
+        ? { opacity: 0.6, scale: 1.08 }
+        : { opacity: 0.25, scale: 1.18 };
   return (
     <span className="inline-block w-[0.56em] text-center">
       <m.span
         key={char}
         className="inline-block"
-        initial={
-          reduce
-            ? false
-            : settled
-              ? { opacity: 0.25, scale: 1.18 }
-              : { opacity: 0, scale: 1.55, rotate: -8 }
-        }
-        animate={{ opacity: 1, scale: 1, rotate: 0 }}
+        initial={initial}
+        animate={LANDED}
         transition={{
-          duration: settled ? 0.17 : 0.24,
+          duration: !settled ? 0.24 : subtle ? 0.14 : 0.17,
           ease: EASE,
-          delay: settled ? 0 : 0.05 * index,
+          delay: settled ? 0 : FIRST_DELAY + 0.05 * index,
         }}
       >
         {char}
@@ -103,7 +135,14 @@ function Stamps({ units, frames, settled, reduce }: { units: Unit[]; frames: Pat
               <Frame paths={frames[i % frames.length]} />
               <span className="stamp-ink font-display text-[2.7rem] font-black leading-none sm:text-6xl">
                 {text.split("").map((c, j) => (
-                  <Digit key={j} char={c} index={i * 2 + j} settled={settled} reduce={reduce} />
+                  <Digit
+                    key={j}
+                    char={c}
+                    index={i * 2 + j}
+                    settled={settled}
+                    reduce={reduce}
+                    subtle={u.label === "sec"}
+                  />
                 ))}
               </span>
             </span>
@@ -120,70 +159,100 @@ export function Countdown({ frames }: { frames: PathInfo[][] }) {
   const reduce = useReducedMotion() ?? false;
   const ready = now !== null;
   const [settled, setSettled] = useState(false);
+  const box = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!ready) return;
-    const t = setTimeout(() => setSettled(true), 700);
+    const t = setTimeout(() => setSettled(true), 1000);
     return () => clearTimeout(t);
   }, [ready]);
 
+  // stop ticking while the timer is scrolled away
+  useEffect(() => {
+    const el = box.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(([entry]) => setOffscreen(!entry.isIntersecting));
+    io.observe(el);
+    return () => {
+      io.disconnect();
+      setOffscreen(false);
+    };
+  }, []);
+
+  const stamp = reduce ? false : STAMP;
+  let body;
+
   if (!ready) {
-    return (
-      <LazyMotion features={domAnimation}>
-        <div className="flex flex-col gap-3" role="timer" aria-label="Countdown to MakeYourMark">
-          <p className="font-display text-2xl leading-none">Starts in</p>
-          <Stamps
-            units={["days", "hrs", "min", "sec"].map((label) => ({ value: null, label }))}
-            frames={frames}
-            settled
-            reduce
-          />
-        </div>
-      </LazyMotion>
-    );
-  }
-
-  const p = getPhase(now * 1000);
-
-  if (p.phase === "after") {
-    return (
-      <div className="max-w-sm">
-        <p className="font-display text-4xl leading-none">That&rsquo;s a wrap!</p>
-        <p className="mt-2">
-          Thanks for coming down and making your mark. Hope your flower&rsquo;s still standing.
-        </p>
+    body = (
+      <div className="flex flex-col gap-3" role="timer" aria-label="Countdown to MakeYourMark">
+        <p className="font-display text-2xl leading-none">Starts in</p>
+        <Stamps
+          units={["days", "hrs", "min", "sec"].map((label) => ({ value: null, label }))}
+          frames={frames}
+          settled
+          reduce
+        />
       </div>
     );
+  } else {
+    const p = getPhase(now * 1000);
+    if (p.phase === "after") {
+      body = (
+        <div className="max-w-sm">
+          <m.p
+            className="inline-block origin-left font-display text-4xl leading-none"
+            initial={stamp}
+            animate={LANDED}
+            transition={{ duration: 0.24, ease: EASE }}
+          >
+            That&rsquo;s a wrap!
+          </m.p>
+          <p className="mt-2">
+            Thanks for coming down and making your mark. Hope your flower&rsquo;s still standing.
+          </p>
+        </div>
+      );
+    } else {
+      const d = splitDuration(p.remaining);
+      const units: Unit[] =
+        p.phase === "before"
+          ? [
+              ...(d.days > 0 ? [{ value: d.days, label: d.days === 1 ? "day" : "days" }] : []),
+              { value: d.hours, label: "hrs" },
+              { value: d.minutes, label: "min" },
+              { value: d.seconds, label: "sec" },
+            ]
+          : [
+              { value: d.hours, label: "hrs" },
+              { value: d.minutes, label: "min" },
+              { value: d.seconds, label: "sec" },
+            ];
+      body = (
+        <div className="flex flex-col gap-3" role="timer" aria-live="off" aria-label="Countdown to MakeYourMark">
+          {p.phase === "before" ? (
+            <p className="font-display text-2xl leading-none">Starts in</p>
+          ) : (
+            <p className="font-display text-2xl leading-none">
+              <m.span
+                className="inline-block bg-tomato px-2 py-0.5 text-ink"
+                initial={stamp}
+                animate={LANDED}
+                transition={{ duration: 0.24, ease: EASE }}
+              >
+                Happening now!
+              </m.span>{" "}
+              <span className="whitespace-nowrap">Ends in</span>
+            </p>
+          )}
+          <Stamps units={units} frames={frames} settled={settled} reduce={reduce} />
+        </div>
+      );
+    }
   }
-
-  const d = splitDuration(p.remaining);
-  const units: Unit[] =
-    p.phase === "before"
-      ? [
-          ...(d.days > 0 ? [{ value: d.days, label: d.days === 1 ? "day" : "days" }] : []),
-          { value: d.hours, label: "hrs" },
-          { value: d.minutes, label: "min" },
-          { value: d.seconds, label: "sec" },
-        ]
-      : [
-          { value: d.hours, label: "hrs" },
-          { value: d.minutes, label: "min" },
-          { value: d.seconds, label: "sec" },
-        ];
 
   return (
     <LazyMotion features={domAnimation}>
-      <div className="flex flex-col gap-3" role="timer" aria-live="off" aria-label="Countdown to MakeYourMark">
-        {p.phase === "before" ? (
-          <p className="font-display text-2xl leading-none">Starts in</p>
-        ) : (
-          <p className="font-display text-2xl leading-none">
-            <span className="bg-tomato px-2 py-0.5 text-ink">Happening now!</span>{" "}
-            <span className="whitespace-nowrap">Ends in</span>
-          </p>
-        )}
-        <Stamps units={units} frames={frames} settled={settled} reduce={reduce} />
-      </div>
+      <div ref={box}>{body}</div>
     </LazyMotion>
   );
 }
