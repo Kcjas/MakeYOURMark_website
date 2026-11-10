@@ -39,7 +39,7 @@ export function Stations() {
         </li>
 
         {/* 2. pinking-shear card, taped */}
-        <li className="relative -mt-2 ml-auto w-[90%] max-w-sm lg:col-span-4 lg:col-start-6 lg:mt-24 lg:ml-0 lg:w-auto lg:max-w-none">
+        <li className="relative -mt-2 ml-auto w-[90%] max-w-sm lg:col-span-4 lg:col-start-6 lg:mt-8 lg:ml-0 lg:w-auto lg:max-w-none">
           <article className="wiggle tilt relative" style={vars({ "--r": "var(--tilt-b)" })}>
             <div className="cut-md">
               <div className="pinked bg-tomato px-7 pb-8 pt-7">
