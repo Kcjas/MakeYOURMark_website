@@ -167,17 +167,30 @@ p {
   }
 }
 
-/* hero strips land like paper being pasted down; starts visible, never faded */
+/* Hero opening, in order: wire draws (0-750ms) -> strips land + letters draw
+   (600-2000ms) -> byline, sticker, date tag (1850ms+) -> timer (2150ms+).
+   Every piece is waiting off-stage until its --d delay, then gets pasted down. */
 @keyframes slap {
-  from {
-    scale: 1.14;
-    rotate: calc(var(--r, 0deg) + 5deg);
+  0% {
+    opacity: 0;
+    scale: 1.18;
+    rotate: calc(var(--r, 0deg) + 6deg);
   }
+  30% {
+    opacity: 1;
+  }
+}
+
+.draw-on {
+  stroke-dasharray: none;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .slap {
-    animation: slap 320ms var(--ease-out) var(--d, 0ms) backwards;
+    animation: slap 340ms var(--ease-out) var(--d, 0ms) backwards;
+  }
+  .draw-on {
+    animation: glyph-trace 750ms cubic-bezier(0.65, 0, 0.35, 1) var(--d, 0ms) both;
   }
 }
 

@@ -22,15 +22,15 @@ const frames = [11, 12, 13, 14].map((seed) =>
 export function HeroTop() {
   return (
     <header className="relative flex items-start justify-between gap-4 px-4 pt-5 sm:px-8 lg:px-14 lg:pt-8">
-      <p className="pt-2 font-display text-xl leading-none">
+      <p className="slap pt-2 font-display text-xl leading-none" style={vars({ "--d": "1850ms" })}>
         EnROOT Group 6
         <br />
         <span className="text-base">part of ROOT, SUTD</span>
       </p>
       {/* on phones the sticker is stuck over the title's corner so the header stays one line tall */}
       <div
-        className="tilt wiggle absolute right-3 top-3 z-40 shrink-0 lg:static lg:-mr-1"
-        style={vars({ "--r": "8deg" })}
+        className="tilt wiggle slap absolute right-3 top-3 z-40 shrink-0 lg:static lg:-mr-1"
+        style={vars({ "--r": "8deg", "--d": "1850ms" })}
       >
         <FreeSticker className="size-[6.25rem] lg:size-32" />
       </div>
@@ -52,31 +52,31 @@ export function Hero() {
           className="flex flex-col font-black leading-[0.8] text-[clamp(4rem,min(28vw,12.5svh),9rem)] lg:flex-row lg:items-start lg:text-[min(15vw,14.5rem)]"
         >
           <span className="sr-only">MakeYourMark</span>
-          <Strip paper="bg-tomato" tilt="var(--tilt-a)" className="relative z-10" delay={0}>
-            <DrawnWord word="Make" start={150} ink="var(--color-ink)" />
+          <Strip paper="bg-tomato" tilt="var(--tilt-a)" className="relative z-10" delay={600}>
+            <DrawnWord word="Make" start={800} ink="var(--color-ink)" />
           </Strip>
           <Strip
             paper="bg-grass"
             tilt="var(--tilt-b)"
-            delay={80}
+            delay={680}
             className="relative z-20 -mt-1 self-end lg:-ml-8 lg:mt-20 lg:self-auto"
             overlay={<WireOver className="absolute -left-[0.06em] -top-10 z-30 hidden h-[calc(100%+1rem)] w-auto lg:block" />}
           >
-            <DrawnWord word="Your" start={330} ink="var(--color-ink)" />
+            <DrawnWord word="Your" start={980} ink="var(--color-ink)" />
           </Strip>
           <Strip
             paper="bg-cobalt"
             tilt="var(--tilt-c)"
-            delay={160}
+            delay={760}
             className="relative z-30 -mt-1 ml-[5%] lg:-ml-8 lg:mt-1"
           >
-            <DrawnWord word="Mark" start={510} ink="var(--color-card)" />
+            <DrawnWord word="Mark" start={1160} ink="var(--color-card)" />
           </Strip>
         </h1>
       </div>
 
       <div className="mt-5 flex flex-col gap-7 sm:mt-9 sm:gap-12 lg:mt-14 lg:flex-row lg:items-end lg:gap-20">
-        <div className="tilt relative w-fit" style={vars({ "--r": "var(--tilt-b)" })}>
+        <div className="tilt slap relative w-fit" style={vars({ "--r": "var(--tilt-b)", "--d": "1950ms" })}>
           <Tape className="absolute -top-3 left-1/2 z-10 h-7 w-24 -translate-x-1/2 -rotate-3" />
           <div className="cut-md">
             <div className="torn-all bg-card px-6 pb-5 pt-6">
@@ -89,14 +89,18 @@ export function Hero() {
           </div>
         </div>
 
-        <div className="relative w-fit">
+        <div className="slap relative w-fit" style={vars({ "--d": "2100ms" })}>
           <PaintSmear className="absolute -left-5 top-7 -z-10 h-24 w-[calc(100%+2.5rem)] sm:h-28" />
           <Countdown frames={frames} />
         </div>
       </div>
 
       {/* table debris, desktop only: the session is mid-way */}
-      <div className="pointer-events-none absolute bottom-10 right-14 hidden h-72 w-[30rem] lg:block" aria-hidden>
+      <div
+        className="slap pointer-events-none absolute bottom-10 right-14 hidden h-72 w-[30rem] lg:block"
+        style={vars({ "--d": "2050ms" })}
+        aria-hidden
+      >
         <PaintSplat className="absolute right-10 top-0 h-36 w-auto rotate-12" color="var(--color-cobalt)" kind="smear" />
         <Offcuts className="absolute bottom-4 left-0 h-28 w-auto -rotate-6" variant={0} />
         <CottonTuft className="absolute right-48 top-10 h-12 w-auto" />

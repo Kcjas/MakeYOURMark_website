@@ -9,6 +9,7 @@ import {
   useMotionValueEvent,
   useReducedMotion,
   useScroll,
+  useTransform,
 } from "motion/react";
 
 type Pt = [number, number];
@@ -92,6 +93,8 @@ export function PencilLine() {
   const x = useMotionValue(-100);
   const y = useMotionValue(-100);
   const rotate = useMotionValue(90);
+  // the pencil only shows up once you start scrolling (keeps the hero opening clean)
+  const pencilOpacity = useTransform(scrollYProgress, [0, 0.015], [0, 1]);
 
   // Measure the wrapper. Ignore small height changes (an FAQ opening, the URL bar).
   useEffect(() => {
@@ -147,7 +150,7 @@ export function PencilLine() {
             />
           </svg>
           {!reduce && (
-            <m.div className="absolute left-0 top-0" style={{ x, y, rotate, transformOrigin: "0 0" }}>
+            <m.div className="absolute left-0 top-0" style={{ x, y, rotate, opacity: pencilOpacity, transformOrigin: "0 0" }}>
               <Pencil />
             </m.div>
           )}

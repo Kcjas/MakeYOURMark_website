@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import type React from "react";
 import { Rough } from "./rough";
 
 type P = { className?: string };
@@ -111,8 +112,47 @@ export function PipeCleanerWire({ className, vertical }: P & { vertical?: boolea
       className={className}
       {...a11y}
     >
-      <Chenille d={d} />
+      <DrawOn id={vertical ? "wire-v" : "wire-h"} d={d} delay={0} box={vertical ? [400, 600] : [1440, 260]}>
+        <Chenille d={d} />
+      </DrawOn>
     </svg>
+  );
+}
+
+/**
+ * Reveals its children along path `d` on first load, like the wire being laid
+ * down. A fat stroke in a mask is traced with stroke-dashoffset (CSS, so it runs
+ * before hydration); with reduced motion the mask is simply full.
+ */
+function DrawOn({
+  id,
+  d,
+  delay,
+  box,
+  children,
+}: {
+  id: string;
+  d: string;
+  delay: number;
+  box: [number, number];
+  children: React.ReactNode;
+}) {
+  return (
+    <>
+      <mask id={id} maskUnits="userSpaceOnUse" x={-120} y={-120} width={box[0] + 240} height={box[1] + 240}>
+        <path
+          d={d}
+          pathLength={1}
+          fill="none"
+          stroke="#fff"
+          strokeWidth={90}
+          strokeLinecap="round"
+          className="draw-on"
+          style={{ "--d": `${delay}ms` } as React.CSSProperties}
+        />
+      </mask>
+      <g mask={`url(#${id})`}>{children}</g>
+    </>
   );
 }
 
@@ -137,7 +177,9 @@ function Chenille({ d, width = 18 }: { d: string; width?: number }) {
 export function WireOver({ className }: P) {
   return (
     <svg viewBox="0 0 40 160" overflow="visible" className={clsx("pointer-events-none", className)} {...a11y}>
-      <Chenille d="M-6 -4 C 30 30, 0 100, 40 150" width={22} />
+      <DrawOn id="wire-over" d="M-6 -4 C 30 30, 0 100, 40 150" delay={1100} box={[40, 160]}>
+        <Chenille d="M-6 -4 C 30 30, 0 100, 40 150" width={22} />
+      </DrawOn>
     </svg>
   );
 }

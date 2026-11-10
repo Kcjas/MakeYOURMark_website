@@ -56,8 +56,8 @@ const getServerSnapshot = () => null;
 /* ---------- pieces ---------- */
 const TILTS = ["-2deg", "1.5deg", "-1deg", "2.5deg"];
 const EASE = [0.23, 1, 0.32, 1] as const;
-/** first stamps wait for the title to finish drawing */
-const FIRST_DELAY = 1.1;
+/** seconds after page start when the first digit stamps (after the hero opening) */
+const STAMP_AT = 2.3;
 const STAMP = { opacity: 0, scale: 1.5, rotate: -8 };
 const LANDED = { opacity: 1, scale: 1, rotate: 0 };
 
@@ -87,6 +87,7 @@ function Digit({
   settled,
   reduce,
   subtle,
+  base,
 }: {
   char: string;
   index: number;
@@ -94,6 +95,8 @@ function Digit({
   reduce: boolean;
   /** seconds change every second: re-stamp gently */
   subtle: boolean;
+  /** delay before the first stamp, in s */
+  base: number;
 }) {
   const initial = reduce
     ? false
@@ -112,7 +115,7 @@ function Digit({
         transition={{
           duration: !settled ? 0.24 : subtle ? 0.14 : 0.17,
           ease: EASE,
-          delay: settled ? 0 : FIRST_DELAY + 0.05 * index,
+          delay: settled ? 0 : base + 0.05 * index,
         }}
       >
         {char}
@@ -121,7 +124,19 @@ function Digit({
   );
 }
 
-function Stamps({ units, frames, settled, reduce }: { units: Unit[]; frames: PathInfo[][]; settled: boolean; reduce: boolean }) {
+function Stamps({
+  units,
+  frames,
+  settled,
+  reduce,
+  base = 0,
+}: {
+  units: Unit[];
+  frames: PathInfo[][];
+  settled: boolean;
+  reduce: boolean;
+  base?: number;
+}) {
   return (
     <ol className="flex gap-2.5 sm:gap-4">
       {units.map((u, i) => {
@@ -142,6 +157,7 @@ function Stamps({ units, frames, settled, reduce }: { units: Unit[]; frames: Pat
                     settled={settled}
                     reduce={reduce}
                     subtle={u.label === "sec"}
+                    base={base}
                   />
                 ))}
               </span>
@@ -160,12 +176,16 @@ export function Countdown({ frames }: { frames: PathInfo[][] }) {
   const ready = now !== null;
   const [settled, setSettled] = useState(false);
   const box = useRef<HTMLDivElement>(null);
+  // Measured from page start, not hydration, so a slow phone doesn't stamp late.
+  const [base] = useState(() =>
+    typeof window === "undefined" ? 0 : Math.max(0, STAMP_AT - performance.now() / 1000),
+  );
 
   useEffect(() => {
     if (!ready) return;
-    const t = setTimeout(() => setSettled(true), 1800);
+    const t = setTimeout(() => setSettled(true), (base + 0.6) * 1000);
     return () => clearTimeout(t);
-  }, [ready]);
+  }, [ready, base]);
 
   // stop ticking while the timer is scrolled away
   useEffect(() => {
@@ -203,7 +223,7 @@ export function Countdown({ frames }: { frames: PathInfo[][] }) {
             className="inline-block origin-left font-display text-4xl leading-none"
             initial={stamp}
             animate={LANDED}
-            transition={{ duration: 0.24, ease: EASE }}
+            transition={{ duration: 0.24, ease: EASE, delay: settled ? 0 : base }}
           >
             That&rsquo;s a wrap!
           </m.p>
@@ -237,14 +257,14 @@ export function Countdown({ frames }: { frames: PathInfo[][] }) {
                 className="inline-block bg-tomato px-2 py-0.5 text-ink"
                 initial={stamp}
                 animate={LANDED}
-                transition={{ duration: 0.24, ease: EASE }}
+                transition={{ duration: 0.24, ease: EASE, delay: settled ? 0 : base }}
               >
                 Happening now!
               </m.span>{" "}
               <span className="whitespace-nowrap">Ends in</span>
             </p>
           )}
-          <Stamps units={units} frames={frames} settled={settled} reduce={reduce} />
+          <Stamps units={units} frames={frames} settled={settled} reduce={reduce} base={base} />
         </div>
       );
     }
