@@ -60,11 +60,15 @@ export function Stations() {
           <article className="wiggle tilt relative origin-top-left" style={vars({ "--r": "var(--tilt-c)" })}>
             <div className="cut-md">
               <div className="torn relative overflow-hidden bg-cobalt px-7 pb-9 pt-10 text-card sm:grid sm:min-h-[17rem] sm:grid-cols-[1fr_16rem] sm:gap-6">
-                <div className="relative order-2 h-32 sm:h-auto" aria-hidden>
-                  <Handprint className="absolute left-0 top-0 h-28 w-auto -rotate-12 text-tomato sm:left-2 sm:top-2" />
-                  <Handprint className="absolute left-[24%] top-3 h-24 w-auto rotate-[10deg] text-sunflower sm:left-32 sm:top-2" />
-                  <Handprint className="absolute left-[50%] top-0 h-28 w-auto -rotate-[4deg] text-grass sm:left-8 sm:top-32" />
-                  <Handprint className="absolute left-[74%] top-4 h-24 w-auto rotate-[18deg] text-card sm:left-40 sm:top-32" />
+                {/* evenly spaced, same size, small alternating tilts */}
+                <div
+                  className="order-2 grid grid-cols-4 place-items-center gap-x-5 py-2 sm:grid-cols-2 sm:content-center sm:gap-x-8 sm:gap-y-6 sm:py-0"
+                  aria-hidden
+                >
+                  <Handprint className="h-20 w-auto -rotate-6 text-tomato sm:h-24" />
+                  <Handprint className="h-20 w-auto rotate-6 text-sunflower sm:h-24" />
+                  <Handprint className="h-20 w-auto rotate-6 text-grass sm:h-24" />
+                  <Handprint className="h-20 w-auto -rotate-6 text-card sm:h-24" />
                 </div>
                 <div className="order-1 mt-4 sm:mt-0">
                   <h3 className="text-[2.5rem] font-black leading-[0.9] sm:text-6xl">{board.name}</h3>
