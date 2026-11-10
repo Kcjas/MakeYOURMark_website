@@ -56,8 +56,8 @@ const getServerSnapshot = () => null;
 /* ---------- pieces ---------- */
 const TILTS = ["-2deg", "1.5deg", "-1deg", "2.5deg"];
 const EASE = [0.23, 1, 0.32, 1] as const;
-/** first stamps wait for the hero strips to land */
-const FIRST_DELAY = 0.35;
+/** first stamps wait for the title to finish drawing */
+const FIRST_DELAY = 1.1;
 const STAMP = { opacity: 0, scale: 1.5, rotate: -8 };
 const LANDED = { opacity: 1, scale: 1, rotate: 0 };
 
@@ -163,7 +163,7 @@ export function Countdown({ frames }: { frames: PathInfo[][] }) {
 
   useEffect(() => {
     if (!ready) return;
-    const t = setTimeout(() => setSettled(true), 1000);
+    const t = setTimeout(() => setSettled(true), 1800);
     return () => clearTimeout(t);
   }, [ready]);
 

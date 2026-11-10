@@ -9,6 +9,7 @@ import {
   Tape,
   WireOver,
 } from "@/components/doodles";
+import { DrawnWord } from "@/components/drawn-word";
 import { Strip, vars } from "@/components/paper";
 import { Rough, roughPaths } from "@/components/rough";
 import { when } from "@/lib/content";
@@ -48,28 +49,28 @@ export function Hero() {
         <PipeCleanerWire className="absolute -left-14 top-0 -z-10 hidden h-full w-[calc(100%+7rem)] lg:block" />
         <h1
           id="title"
-          aria-label="MakeYourMark"
           className="flex flex-col font-black leading-[0.8] text-[clamp(4rem,min(28vw,12.5svh),9rem)] lg:flex-row lg:items-start lg:text-[min(15vw,14.5rem)]"
         >
-          <Strip paper="bg-tomato text-ink" tilt="var(--tilt-a)" className="relative z-10" delay={0}>
-            Make
+          <span className="sr-only">MakeYourMark</span>
+          <Strip paper="bg-tomato" tilt="var(--tilt-a)" className="relative z-10" delay={0}>
+            <DrawnWord word="Make" start={150} ink="var(--color-ink)" />
           </Strip>
           <Strip
-            paper="bg-grass text-ink"
+            paper="bg-grass"
             tilt="var(--tilt-b)"
             delay={80}
             className="relative z-20 -mt-1 self-end lg:-ml-8 lg:mt-20 lg:self-auto"
             overlay={<WireOver className="absolute -left-[0.06em] -top-10 z-30 hidden h-[calc(100%+1rem)] w-auto lg:block" />}
           >
-            Your
+            <DrawnWord word="Your" start={330} ink="var(--color-ink)" />
           </Strip>
           <Strip
-            paper="bg-cobalt text-card"
+            paper="bg-cobalt"
             tilt="var(--tilt-c)"
             delay={160}
             className="relative z-30 -mt-1 ml-[5%] lg:-ml-8 lg:mt-1"
           >
-            Mark
+            <DrawnWord word="Mark" start={510} ink="var(--color-card)" />
           </Strip>
         </h1>
       </div>

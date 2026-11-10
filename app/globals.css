@@ -181,6 +181,37 @@ p {
   }
 }
 
+/* title letters: a pen traces each outline, then the ink floods in */
+.draw-glyph {
+  stroke-width: 16;
+  stroke-linejoin: round;
+}
+
+@keyframes glyph-trace {
+  from {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes glyph-fill {
+  from {
+    fill-opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .draw-glyph {
+    animation:
+      glyph-trace 520ms cubic-bezier(0.77, 0, 0.175, 1) var(--d, 0ms) both,
+      glyph-fill 220ms var(--ease-out) calc(var(--d, 0ms) + 380ms) both;
+  }
+}
+
 @utility press {
   transition: scale 120ms var(--ease-out);
   &:active {

@@ -26,7 +26,7 @@ export function Strip({
   return (
     <span className={clsx("tilt slap block w-fit", className)} style={vars({ "--r": tilt, "--d": `${delay}ms` })}>
       <span className="cut-md block">
-        <span className={clsx("torn block px-[0.14em] pb-[0.04em] pt-[0.12em]", paper)}>{children}</span>
+        <span className={clsx("torn block px-[0.13em] py-[0.08em]", paper)}>{children}</span>
       </span>
       {overlay}
     </span>
