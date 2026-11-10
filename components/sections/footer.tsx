@@ -7,7 +7,7 @@ export function Footer() {
         <div>
           <p className="font-display text-4xl font-black">MakeYourMark</p>
           <p className="mt-1 max-w-[42ch]">
-            Organised by EnROOT Group 6, part of ROOT, SUTD&rsquo;s student government.
+            Organised by EnROOT Group 6, part of ROOT.
           </p>
         </div>
         {INSTAGRAM_URL === INSTAGRAM_PLACEHOLDER ? (
