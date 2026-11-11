@@ -1,7 +1,7 @@
 // Every word on the page lives here, so edits don't need a dev.
 
 // TODO: replace with the real Instagram account, e.g. "https://www.instagram.com/your_handle/".
-// While it equals the placeholder, the footer shows "Instagram coming soon" instead of a link.
+// While it equals the placeholder, the footer shows no Instagram link at all.
 export const INSTAGRAM_PLACEHOLDER = "https://www.instagram.com/";
 export const INSTAGRAM_URL: string = INSTAGRAM_PLACEHOLDER;
 export const INSTAGRAM_LABEL = "Instagram";
@@ -57,3 +57,13 @@ export const faqs = [
     a: "Light snacks, while they last. Come earlier if that matters to you.",
   },
 ] as const;
+
+export const calendar = {
+  button: "Add to calendar",
+  options: {
+    apple: "Apple / iPhone",
+    google: "Google",
+    outlook: "Outlook (SUTD email)",
+  },
+  details: "Free walk-in craft night. Pipe cleaner flowers, squishies and a shared hand painting board. Just walk in.",
+};

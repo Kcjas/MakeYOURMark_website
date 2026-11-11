@@ -1,3 +1,4 @@
+import { AddToCalendar } from "@/components/add-to-calendar";
 import { Countdown } from "@/components/countdown";
 import {
   CottonTuft,
@@ -38,7 +39,7 @@ export function HeroTop() {
 
 export function Hero() {
   return (
-    <section aria-labelledby="title" className="relative isolate px-4 pb-16 sm:px-8 lg:px-14 lg:pb-24">
+    <section aria-labelledby="title" className="relative isolate z-10 px-4 pb-16 sm:px-8 lg:px-14 lg:pb-24">
       <div className="relative mt-3 lg:mt-0">
         <PipeCleanerWire
           vertical
@@ -74,16 +75,23 @@ export function Hero() {
       </div>
 
       <div className="mt-5 flex flex-col gap-7 sm:mt-9 sm:gap-12 lg:mt-14 lg:flex-row lg:items-end lg:gap-20">
-        <div className="tilt slap relative w-fit" style={vars({ "--r": "var(--tilt-b)", "--d": "1950ms" })}>
-          <Tape className="absolute -top-3 left-1/2 z-10 h-7 w-24 -translate-x-1/2 -rotate-3" />
-          <div className="cut-md">
-            <div className="torn-all bg-card px-6 pb-5 pt-6">
-              <p className="font-display text-[2.6rem] font-black leading-none">
-                <time dateTime={when.isoStart}>{when.day}</time>
-              </p>
-              <p className="font-display text-3xl leading-tight">{when.time}</p>
-              <p className="mt-1 text-lg font-bold">{when.place}, SUTD</p>
+        {/* z-20: the open calendar scrap has to sit over the countdown below it on phones */}
+        <div className="relative z-20 flex flex-col items-start gap-6">
+          <div className="tilt slap relative w-fit" style={vars({ "--r": "var(--tilt-b)", "--d": "1950ms" })}>
+            <Tape className="absolute -top-3 left-1/2 z-10 h-7 w-24 -translate-x-1/2 -rotate-3" />
+            <div className="cut-md">
+              <div className="torn-all bg-card px-6 pb-5 pt-6">
+                <p className="font-display text-[2.6rem] font-black leading-none">
+                  <time dateTime={when.isoStart}>{when.day}</time>
+                </p>
+                <p className="font-display text-3xl leading-tight">{when.time}</p>
+                <p className="mt-1 text-lg font-bold">{when.place}, SUTD</p>
+              </div>
             </div>
+          </div>
+
+          <div className="slap ml-2" style={vars({ "--d": "2020ms" })}>
+            <AddToCalendar tilt="var(--tilt-c)" seed={71} />
           </div>
         </div>
 

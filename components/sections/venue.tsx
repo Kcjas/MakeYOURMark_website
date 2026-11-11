@@ -1,4 +1,5 @@
 import { CottonTuft, Offcuts, PaintSplat, Tape } from "@/components/doodles";
+import { AddToCalendar } from "@/components/add-to-calendar";
 import { vars } from "@/components/paper";
 import { when } from "@/lib/content";
 
@@ -26,6 +27,10 @@ export function Venue() {
             </p>
           </div>
         </div>
+      </div>
+      {/* opens upward: the footer sits right below */}
+      <div className="relative z-10 mt-7 ml-3 sm:ml-[calc(6%+0.75rem)]">
+        <AddToCalendar tilt="var(--tilt-a)" seed={83} up />
       </div>
     </section>
   );

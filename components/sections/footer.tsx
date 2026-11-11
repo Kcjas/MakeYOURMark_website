@@ -10,9 +10,7 @@ export function Footer() {
             Organised by EnROOT Group 6, part of ROOT.
           </p>
         </div>
-        {INSTAGRAM_URL === INSTAGRAM_PLACEHOLDER ? (
-          <p className="font-display text-3xl">Instagram coming soon</p>
-        ) : (
+        {INSTAGRAM_URL === INSTAGRAM_PLACEHOLDER ? null : (
           <a
             href={INSTAGRAM_URL}
             target="_blank"
