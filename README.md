@@ -1,11 +1,9 @@
 # MakeYourMark
+ By EnROOT Group 6, part of ROOT.
 
-**A one-page event site for MakeYourMark, a free walk-in craft night at SUTD.**
-Mon 16 Nov 2026 · 5:30–8:30pm SGT · Campus Centre. By EnROOT Group 6, part of ROOT.
+Live site: [makeyourmark-iota.vercel.app](https://makeyourmark-iota.vercel.app/)
 
-### 🔗 Live site: [makeyourmark-iota.vercel.app](https://makeyourmark-iota.vercel.app/)
-
-> 📱 **Optimised for mobile.** Best viewed on a phone, or with your browser's mobile view.
+> **Optimised for mobile.** Best viewed on a phone, or with your browser's mobile view.
 
 People reach the site by scanning a QR code on a campus poster, almost always on their phones while walking past. The goal is that they can read it in under 30 seconds and know when, where, what's on, and that they can just show up.
 
