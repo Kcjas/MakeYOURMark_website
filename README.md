@@ -1,5 +1,5 @@
 # MakeYourMark
-By EnROOT Group 6, part of ROOT.
+By EnROOT Group 6
 
 Live site: [makeyourmark-iota.vercel.app](https://makeyourmark-iota.vercel.app/)
 
