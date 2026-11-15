@@ -3,6 +3,10 @@
 **A one-page event site for MakeYourMark, a free walk-in craft night at SUTD.**
 Mon 16 Nov 2026 · 5:30–8:30pm SGT · Campus Centre. By EnROOT Group 6, part of ROOT.
 
+### 🔗 Live site: [makeyourmark-iota.vercel.app](https://makeyourmark-iota.vercel.app/)
+
+> 📱 **Optimised for mobile.** Best viewed on a phone, or with your browser's mobile view.
+
 People reach the site by scanning a QR code on a campus poster, almost always on their phones while walking past. The goal is that they can read it in under 30 seconds and know when, where, what's on, and that they can just show up.
 
 <p align="center">
@@ -21,7 +25,7 @@ People reach the site by scanning a QR code on a campus poster, almost always on
 - **Title that draws itself.** "Make Your Mark" is drawn stroke by stroke from the font's real glyph outlines, which are pre-extracted to `lib/title-glyphs.ts`.
 - **Live countdown.** Shows "Starts in" before the event, "Happening now" while it runs, then a thank-you note afterwards.
 - **Add to calendar.** One button for Google Calendar or a downloadable `.ics` file (Apple Calendar, Outlook). The `.ics` follows RFC 5545 and is generated at build time from the same event times the countdown uses.
-- **Phone first.** Designed for a 390px screen and scales up to desktop.
+- **Optimised for mobile.** Designed for a 390px phone screen first, then scaled up to desktop.
 - **Accessible.** A Radix accordion for the FAQ (works with a keyboard and screen readers), a legible body font (Atkinson Hyperlegible), and all motion turned off for people who set `prefers-reduced-motion`.
 - **Fully static.** Every route is prerendered and fonts are self-hosted, so there are no runtime requests to Google.
 
