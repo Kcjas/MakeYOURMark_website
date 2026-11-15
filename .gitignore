@@ -42,3 +42,9 @@ next-env.d.ts
 
 .vercel
 .env*
+
+# local tooling / working files (not part of the site)
+AGENTS.md
+PRODUCT.md
+.impeccable/
+qr/
